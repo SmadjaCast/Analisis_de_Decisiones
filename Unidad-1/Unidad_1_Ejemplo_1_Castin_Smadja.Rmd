@@ -1,0 +1,198 @@
+---
+title: "Unidad1_Ejemplo1"
+author: "Smadja Castin"
+date: "2023-09-15"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejemplo 1
+
+En el transcurso del mes de enero de cada año, el propietario de una
+tienda de artículos deportivos debe enviar a uno de sus proveedores el
+pedido de playeras de verano. La cantidad solicitada debe hacerla en
+lotes de 100 prendas y el precio varía de la siguiente manera: si pide
+100 playeras el costo es de \$100 por prenda; si pide 200 el costo baja
+a \$90 y si solicita 300 o más el costo será de \$85. El precio al
+público de cada playera es de \$120, pero al final del verano lo que no
+se vendió se remata a mitad de precio.
+
+Él supone que la demanda será de 100, 150 o 200 prendas, sin embargo,
+por cada playera que un cliente solicite y no pueda adquirir, tendrá una
+pérdida de \$5 de su buen nombre. Debido al tiempo de entrega, el pedido
+se debe colocar en una sola ocasión.
+
+Identificar los elementos del problema y determinar la matriz de pagos.
+
+## Solución
+
+Elementos del problema:
+
+1.  Decisor: El propietario de la tienda.
+
+2.  Cursos de acción:
+
+    $a_1 \approx$ pedir 100 prendas posibles.
+
+    $a_2 \approx$ pedir 200 prendas.
+
+    $a_3 \approx$ pedir 300 prendas.
+
+    Se codifica como el vector $a$:
+
+    ```{r}
+    # Oferta
+    a <- c(100,200,300)
+    a
+    ```
+
+3.  Estados de la naturaleza:
+
+    $\theta_1 \approx$ demanda de 100 prendas.
+
+    $\theta_2 \approx$ demanda de 150 prendas.
+
+    $\theta_3 \approx$ demanda de 200 prendas.
+
+    Se codifica como el vector $\theta$:
+
+    ```{r}
+    # Demanda
+    demanda <- c(100,150,200)
+    demanda
+    ```
+
+4.  Función de consecuencias: Pago asociado con cada par
+    ($\theta_i$,$a_j$)
+
+    La función de consecuencias depende de la cantidad de playeras
+    pedidas (pedido) y de la cantidad vendida (demanda):
+
+    (a) Si la demanda es igual al pedido, el resultado está dado por:
+
+    $(demanda)×(ganancia)$
+
+    donde:
+
+    $ganancia = precio\ de\ venta\ -\ precio\ de\ compra$
+
+    (b) Si la demanda es menor que el pedido, el resultado se obtiene al
+        calcular:
+
+    $[(demanda)(ganancia)]+[(pedido−demanda)(precio\ de\  remate−precio\ de\ compra)]$
+
+    (c) Y si la demanda es mayor que el pedido:
+
+    $[(pedido)(ganancia)]−[(5)(demanda−pedido)][(pedido)(ganancia)]$
+
+    ```{r}
+    # Definir el vector de oferta
+    a <- c(100,200,300)
+    a
+    # Definir el vector de demanda
+    demanda <- c(100,150,200)
+    demanda
+
+
+    # Tamaño de los vectores
+    num_filas <- length(demanda)
+    num_col <- length(a)
+
+    # Matriz de pagos o ganancia de tamaño num_filas x num_col es inicializada en ceros
+    matriz_de_pagos <- matrix(0, nrow = num_filas, ncol = num_col)
+
+    # Calcular la matriz de pagos con la ganancia en cada caso
+    for (j in 1:num_filas) {
+      for (i in 1:num_col) {
+    # Precios
+    # Precio de compra según el volumen de compra
+    if (a[i] == 100) {
+      precio_de_compra <- 100
+    } else if (a[i] == 200) {
+      precio_de_compra <- 90
+    } else if (a[i] >= 300) {
+      precio_de_compra <- 85
+    } 
+    precio_de_venta <- 120
+    precio_de_remate <- precio_de_venta / 2
+      
+    # Ganancia
+    ganancia <- precio_de_venta - precio_de_compra
+    	  
+    # Matriz de pagos
+    if (demanda[j] == a[i]) {
+      matriz_de_pagos[j, i] <- demanda[j] * ganancia
+    } else if (demanda[j] < a[i]) {
+      matriz_de_pagos[j, i] <- demanda[j] * ganancia + (a[i] - demanda[j]) * (precio_de_remate - precio_de_compra)
+    } else if (demanda[j] > a[i]) { # (c) Y si la demanda es mayor que el pedido
+      matriz_de_pagos[j, i] <- (a[i]) * (ganancia) - (5 * (demanda[j] - a[i]))
+    }
+      }
+    }
+    ```
+
+    ### 5. Matriz de resultados (matriz de pagos, matriz de consecuencias, matriz de decisión):
+
+    ```{r}
+    matriz_de_pagos
+    ```
+
+    $$
+    \begin{matrix}
+    \text{Acción (pedido)} & a_1 & a_2 & a_3 \\
+    \text{Estado de la naturaleza (demanda)} & 100 & 200 & 300 \\
+    \theta_1 = 100 & \$2,000 & \$0 & \$-1,500 \\
+    \theta_2 = 150 & \$1,750 & \$3,000 & \$1,500 \\
+    \theta_3 = 200 & \$1,500 & \$6,000 & \$4,500
+    \end{matrix}
+    $$
+
+### 1.6 Dominación
+
+Una acción está dominada por otra, si los resultados de su
+implementación son al menos tan deseables como los resultados de otra
+acción pero, para al menos un estado de la naturaleza, es menos
+deseable. En tal caso, la acción es inadmisible y por lo tanto puede
+eliminarse de la lista de posibles decisiones sin afectar el resultado
+del proceso de decisión.
+
+En el ejemplo 1 se observa que la estrategia $a_3$ está dominada por la
+estrategia $a_2$:
+
+**Matriz de Dominación:**
+
+$$
+\begin{matrix}
+\text{Acción (pedido)} & a_2 & & a_3 \\
+\text{Estado de la naturaleza (demanda)} & 100 & & 200 & \\
+\theta_1 & 0 & > & -1,500 \\
+\theta_2 & 3,000 & > & 1,500 \\
+\theta_3 & 6,000 & > & 4,500
+\end{matrix}
+$$
+
+Por lo tanto, no es una estrategia admisible y se elimina de la matriz
+de pagos. Es recomendable analizar siempre si existen estrategias
+dominadas en una matriz de pagos y, de ser así, eliminarlas antes de
+iniciar el proceso de toma de decisión.
+
+La matriz de pagos que se utilizará para tomar la decisión del tamaño
+del pedido de playeras es:
+
+**Matriz de Pagos Simplificada:**
+
+$$
+\begin{matrix}
+\text{Acción (pedido)} & a_1 & a_2 \\
+\text{Estado de la naturaleza (demanda)} & 100 & 200 \\
+\theta_1 = 100 & \$2,000 & \$0 \\
+\theta_2 = 150 & \$1,750 & \$3,000 \\
+\theta_3 = 200 & \$1,500 & \$6,000 
+\end{matrix}
+$$
