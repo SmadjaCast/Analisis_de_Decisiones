@@ -1,0 +1,364 @@
+---
+title: "Unidad_1.Ejercicios"
+author: "Smadja Castin"
+date: "2023-09-16"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Unidad 1_Ejercicios
+
+1.  El director de una firma de transporte tiene que adquirir nuevos
+    camiones. Sólo existen dos tipos: de 5 toneladas y de 10 toneladas y
+    la compañía requiere una capacidad total de 30 toneladas. Él asegura
+    que únicamente tienen dos decisiones posibles: comprar 6 camiones
+    ligeros, o comprar 3 camiones pesados. Proporcione usted una lista
+    exhaustiva de las decisiones posibles.
+
+```{r}
+# Inicializar una lista para almacenar las respuestas
+respuestas <- list()
+
+# Bucle para encontrar las combinaciones de camiones
+for (ligeros in 0:6) {
+  # Calcular la cantidad de camiones pesados necesarios en función de los ligeros
+  pesados <- (30 - (ligeros * 5)) / 10
+  
+  # Verificar si la cantidad de camiones pesados es un número entero no negativo
+  if (pesados >= 0 && pesados == floor(pesados)) {
+    # Agregar la combinación a la lista de respuestas
+    respuesta <- paste("Comprar", ligeros, "camiones ligeros de 5 toneladas y", pesados, "camiones pesados de 10 toneladas.")
+    respuestas <- c(respuestas, respuesta)
+  }
+}
+
+# Imprimir las respuestas
+cat("Combinaciones posibles que cumplen con 30 toneladas de capacidad:\n")
+for (i in 1:length(respuestas)) {
+  cat(i, ": ", respuestas[[i]], "\n")
+}
+```
+
+Respuestas:
+
+:   ```         
+    Combinaciones posibles que cumplen con 30 toneladas de capacidad: 
+    1 :  Comprar 0 camiones ligeros de 5 toneladas y 3 camiones pesados de 10 toneladas.  
+    2 :  Comprar 2 camiones ligeros de 5 toneladas y 2 camiones pesados de 10 toneladas.  
+    3 :  Comprar 4 camiones ligeros de 5 toneladas y 1 camiones pesados de 10 toneladas.  
+    4 :  Comprar 6 camiones ligeros de 5 toneladas y 0 camiones pesados de 10 toneladas. 
+    ```
+
+:   
+
+2.  El menú de una casa de comidas contiene sólo dos platillos: uno de
+    carne y el otro de pescado. Tanto uno como el otro puede estar bien
+    o mal. Haga una relación de los estados de la naturaleza y de las
+    decisiones posibles.
+
+```{r}
+# Definir las decisiones y estados de la naturaleza
+decisiones <- c("Pedir el platillo de carne", "Pedir el platillo de pescado")
+estados_naturaleza <- c("Carne Bueno", "Carne Malo", "Pescado Bueno", "Pescado Malo")
+
+# Imprimir los estados de la naturaleza
+cat("Estados de la Naturaleza:\n")
+for (i in 1:length(estados_naturaleza)) {
+  cat(i, ":", estados_naturaleza[i], "\n")
+}
+
+# Imprimir las decisiones posibles
+cat("\nDecisiones Posibles:\n")
+for (i in 1:length(decisiones)) {
+  cat("Decisión", i, ":", decisiones[i], "\n")
+}
+
+# Imprimir el número de estados de la naturaleza y decisiones posibles
+cat("\nEste problema tiene", length(estados_naturaleza), "estados de la naturaleza y", length(decisiones), "decisiones posibles.\n")
+```
+
+Respuestas:
+
+:   ```         
+    Estados de la Naturaleza:
+    1 : Carne Bueno 
+    2 : Carne Malo 
+    3 : Pescado Bueno 
+    4 : Pescado Malo 
+
+    Decisiones Posibles:
+    Decisión 1 : Pedir el platillo de carne 
+    Decisión 2 : Pedir el platillo de pescado 
+
+    Este problema tiene 4 estados de la naturaleza y 2 decisiones posibles.
+    ```
+
+Elementos:
+
+:   $a_1$: Carne
+
+    $a_2$: Pescado
+
+    $\theta_1$: Bien
+
+    $\theta_2$: Mal
+
+$$
+\begin{matrix}
+\text{Decisiones} & a_1 & a_2 \\
+\text{Estado de la naturaleza} & Carne & Pescado & \\
+\theta_1 = Bien & Carne\ Bien & Pescado\ Bien \\
+\theta_2 = Mal & Carne\ Mal & Pescado\ Mal \\
+\end{matrix}
+$$
+
+3.  Repita el ejercicio anterior si se considera otra posibilidad: ir a
+    comer a otro lado, y otro estado de la naturaleza: lo que habrán
+    preparado en casa para comer, que también se supondrá que es carne o
+    pescado.
+
+```{r}
+# Definir las decisiones y estados de la naturaleza
+decisiones <- c("Pedir el platillo de carne", "Pedir el platillo de pescado", "Ir a comer a otro lado")
+estados_naturaleza <- c("Carne Bueno", "Carne Malo", "Pescado Bueno", "Pescado Malo", "Carne en Casa Bueno", "Carne en Casa Malo", "Pescado en Casa Bueno", "Pescado en Casa Malo")
+
+# Inicializar una lista para almacenar las combinaciones
+combinaciones <- list()
+
+# Bucle para encontrar las combinaciones
+for (i in 1:length(decisiones)) {
+  for (j in 1:length(estados_naturaleza)) {
+    combinacion <- paste("Decisión", i, ":", decisiones[i], "| Estado", j, ":", estados_naturaleza[j])
+    combinaciones <- append(combinaciones, combinacion)
+  }
+}
+
+# Imprimir las combinaciones
+cat("Estados de la Naturaleza:\n")
+for (i in 1:length(estados_naturaleza)) {
+  cat(i, ":", estados_naturaleza[i], "\n")
+}
+
+cat("\nDecisiones Posibles:\n")
+for (i in 1:length(decisiones)) {
+  cat("Decisión", i, ":", decisiones[i], "\n")
+}
+
+cat("\nEste problema tiene", length(estados_naturaleza), "estados de la naturaleza y", length(decisiones), "decisiones posibles.\n")
+```
+
+Respuestas:
+
+:   ```         
+    Estados de la Naturaleza: 
+    1 : Carne Bueno  
+    2 : Carne Malo  
+    3 : Pescado Bueno  
+    4 : Pescado Malo  
+    5 : Carne en Casa Bueno  
+    6 : Carne en Casa Malo  
+    7 : Pescado en Casa Bueno  
+    8 : Pescado en Casa Malo   
+
+    Decisiones Posibles: 
+    Decisión 1 : Pedir el platillo de carne  
+    Decisión 2 : Pedir el platillo de pescado  
+    Decisión 3 : Ir a comer a otro lado   
+
+    Este problema tiene 8 estados de la naturaleza y 3 decisiones posibles.
+    ```
+
+Elementos:
+
+:   $C_f$: Carne en fonda; $P_f$: Pescado en fonda
+
+    $C_c$: Carne en casa; $P_c$: Pescado en casa
+
+    $\theta_1$: Bien; $\theta_2$: Mal
+
+$$
+\begin{matrix}
+\text{Decisiones} & a_1 & a_2 & a_3 \\
+\text{Estado de la naturaleza} & C_f & P_f& C_c\ P_c \\
+\theta_1 = Bien & C_f\ Bien & P_f\ Bien & C_c\ Bien \ P_c\ Bien \\
+\theta_2 = Mal & C_f\ Mal & P_f\ Mal & C_c\ Mal \ P_c\ Mal \\
+\end{matrix}
+$$
+
+4.  Repita el ejercicio suponiendo que decide que, si la carne es buena,
+    se queda con ella, independientemente de la calidad del pescado y de
+    lo que haya en casa para comer, y demuestre que en esté caso sólo
+    son necesarios 5 estados de la naturaleza.
+
+```{r}
+# Definir las decisiones y estados de la naturaleza
+decisiones <- c("Carne Buena", "Carne Mala", "Pescado Bueno", "Pescado Malo")
+estados_naturaleza <- c("Carne Buena", "Carne Mala", "Carne Buena en Casa", "Carne Mala en Casa", "Pescado")
+
+# Imprimir los estados de la naturaleza
+cat("Estados de la Naturaleza:\n")
+for (i in 1:length(estados_naturaleza)) {
+  cat("Estados de la Naturaleza", i, ":", estados_naturaleza[i], "\n")
+}
+
+```
+
+Respuestas:
+
+:   ```         
+    Estados de la Naturaleza 1 : Carne Buena  
+    Estados de la Naturaleza 2 : Carne Mala  
+    Estados de la Naturaleza 3 : Carne Buena en Casa  
+    Estados de la Naturaleza 4 : Carne Mala en Casa  
+    Estados de la Naturaleza 5 : Pescado 
+    ```
+
+5.  Un paciente tiene una de cuatro enfermedades: $\theta_1$,
+    $\theta_2$, $\theta_3$, $\theta_4$. El médico dispone de tres
+    tratamientos: $t_1$, $t_2$, $t_3$. Puede aplicar cualquiera de
+    ellos; si no da resultado puede probar con otro y, si vuelve a
+    fracasar, intentar el tercero. La efectividad está descrita en la
+    siguiente tabla: $$
+    \begin{equation}
+    \begin{matrix}
+    {Acción\:(pedido)\\Estado\:de\:la\:\\naturaleza\:(demanda)} & t_1 & t_2 & t_3 \\
+    \theta_1 & 1 & 0 & 0 \\
+    \theta_2 & 0 & 1 & 1 \\
+    \theta_3 & 1 & 0 & 1 \\
+    \theta_4 & 1 & 1 & 0 
+    \end{matrix}
+    \end{equation}
+    $$
+
+Las posibles secuencias de decisiones que el médico puede tomar son:
+
+:   1.  $t_1 t_2$
+    2.  $t_1 t_3$
+    3.  $t_2 t_1$
+    4.  $t_2 t_3 t_1$
+    5.  $t_3 t_2 t_1$
+
+6.  Una cadena de producción fabrica unidades de tres tipos: A, B y C.
+    Un día de trabajo se compone de tres turnos. Todas las unidades que
+    se obtienen en un turno son del mismo tipo. El director de
+    producción debe especificar al principio de cada día, qué tipo de
+    unidades van a ser producidas en cada turno. Si únicamente importa
+    la producción total del día y no el orden en que se fabrican, haga
+    una lista exhaustiva y exclusiva de las decisiones.
+
+```{r}
+# Definir los tipos de unidades y turnos
+tipos_unidades <- c("A", "B", "C")
+turnos <- 3
+
+# Inicializar una lista para almacenar las decisiones
+decisiones <- list()
+
+# Función para generar las decisiones exhaustivas y exclusivas
+generar_decisiones <- function(turno_actual, decision_actual) {
+  if (turno_actual > turnos) {
+    decisiones <<- c(decisiones, paste(sort(decision_actual), collapse = ""))
+  } else {
+    for (tipo in tipos_unidades) {
+      nueva_decision <- c(decision_actual, tipo)
+      generar_decisiones(turno_actual + 1, nueva_decision)
+    }
+  }
+}
+
+# Iniciar la generación de decisiones
+generar_decisiones(1, character(0))
+
+# Eliminar duplicados y ordenar la lista de decisiones
+decisiones <- unique(decisiones)
+
+# Imprimir las decisiones
+for (i in 1:length(decisiones)) {
+  cat(decisiones[[i]], "\n")
+}
+```
+
+Desiciones:
+
+:   ```         
+    AAA  AAB  AAC  ABB  ABC  ACC  BBB  BBC  BCC  CCC
+    ```
+
+7.  En relación con el ejercicio anterior, si la demanda en cualquiera
+    de esos días es nula o igual a la producción de dos turnos, haga una
+    relación de los estados de la naturaleza. Si al principio del día el
+    almacén no tiene unidades tipo A, pero dispone del producto de un
+    turno de unidades B y del de dos turnos de unidades C, considérense'
+    las" ventajas de las distintás decisiones que puede tomar el
+    director de producción.
+
+    Respuesta:
+
+    :   $Nada, a, b, c, ab, ac, bc, abc$
+
+8.  Un contratista eléctrico sabe por experiencia que la casas las
+    ocupan solamente tres tipos de familias: aquéllás cuyas carga-pico
+    de uso de energía es de 15 amperes, las que tienen cargas pico de 20
+    amperes y las que llegan a tener hasta 30 amperes como cresta de
+    carga eléctrica. Si él conociera las necesidades de la familia que
+    comprará cada casa, pondría la alimentación adecuada, con lo que
+    eliminaría el problema de que la instalación se quemara si la casa
+    la ocupa una familia con mayor carga-pico a la que se puso, y los
+    problemas que eso le ocasiona tanto económicos como en su
+    reputación. Uno de sus trabajadores le aconseja que eliminen este
+    riesgo poniendo en todas las casas la instalación para cargas-pico
+    de 30 amperes.
+
+    (a). Defina los estados de la naturaleza en este problema.
+
+    (b). Defina las acciones posibles para el contratista.
+
+    (c). En términos de su reputación en el mercado de trabajo y de la
+    viabilidad económica de su trabajo, ¿considera usted que debe el
+    contratista aceptar la propuesta de su empleado e instalar en todas
+    las casas alimentación eléctrica para cargas de 30 amperes?
+    Justifique su respuesta.
+
+    (d). ¿Podría usted proponer al contratista alguna alternativa
+    diferente? De ser así, descríbala brevemente y justifique su
+    propuesta.
+
+```{=latex}
+a. Los estados de la naturaleza son: 
+    1.Familia con carga pico de 15 amperes. 
+    2.Familia con carga pico de 20 amperes. 
+    3.Familia con carga pico de 30 amperes. 
+    
+b.Las acciones posibles para el contratista son: 
+    1.Instalar una alimentación eléctrica para cargas pico de        15 amperes. 
+    2.Instalar una alimentación eléctrica para cargas pico de        20 amperes. 
+    3.Instalar una alimentación eléctrica para cargas pico de        30 amperes. 
+    
+c. Estaría desperdiciando recursos económicos y materiales 
+
+d. Hacer estudios estadísticos.
+```
+9.  Dada la siguiente matriz de pagos, determine si existen acciones
+    dominadas y, de se así, elimínelas hasta obtener una matriz que
+    contenga solo estrategias admisibles, indicando cómo se da la
+    dominación: $$
+    \begin{matrix}
+    \text{Acciones} & a_2 & a_7 & a_8 \\
+    \text{Estado de la naturaleza} & & & \\
+    \theta_1 & -38 & -70 & 0 \\
+    \theta_2 & 25 & 50 & 0 \\
+    \theta_3 & 170 & 200 & 0 \\
+    \end{matrix}
+    $$
+
+10. Con la matriz de pagos que obtuvo en el problema 9, si tuviera que
+    elegir una acción ¿cuál sería su decisión? ¿Por qué esa y no otras?
+
+    Sería la acción $a_7$, porqué ganará más que las acciones $a_2$ y
+    $a_8$.
